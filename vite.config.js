@@ -18,6 +18,10 @@ export default defineConfig({
             },
         }),
     ],
+    server: {
+        host: '0.0.0.0',  // Important to allow external access from Docker
+        port: 5173,
+      },
     // server: {
     //     https: true, // Force HTTPS for the development server
     // },

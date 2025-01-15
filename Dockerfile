@@ -1,36 +1,47 @@
-FROM php:8.2-fpm
+# ============================================
+# 1) Base Stage: PHP 8.2-FPM with Extensions
+# ============================================
+FROM php:8.2-fpm AS base
 
-# Set working directory
-WORKDIR /var/www/html
+# Install system packages
+RUN apt-get update \
+    && apt-get install -y \
+       git \
+       curl \
+       libpng-dev \
+       libonig-dev \
+       libxml2-dev \
+       libzip-dev \
+       zip \
+       unzip \
+       nano \
+       gnupg2
 
-# Install required packages and PHP extensions
-RUN apt-get update && apt-get install -y \
-    curl \
-    zip \
-    unzip \
-    git \
-    libpq-dev \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+# Install PHP extensions
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
-# Install Composer globally
+# ============================================
+# 2) Install the Latest Composer
+# ============================================
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Install Node.js and npm (Node.js 22)
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y nodejs
+# ============================================
+# 3) Install Node 20.x
+# ============================================
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs
 
-# Install npm dependencies
-COPY package*.json ./
-RUN npm install
+# Create a working directory
+WORKDIR /var/www/html
 
-# Copy the application code
-COPY . .
+# Copy the entire project to container
+COPY . /var/www/html
 
-# Expose port 9000
+# Make sure storage and bootstrap cache directories are writable
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Expose port 9000 for PHP-FPM
 EXPOSE 9000
 
-# Start the PHP-FPM server
+# Set the default command
 CMD ["php-fpm"]

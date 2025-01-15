@@ -4,13 +4,13 @@ services:
   app:
     build:
       context: .
+      dockerfile: Dockerfile
     volumes:
       - .:/var/www/html
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    expose:
+      - 9000
     ports:
-      - "9000:9000"
-    networks:
-      - laravel_network
+      - "5173:5173"
     depends_on:
       - db
     environment:
@@ -18,13 +18,12 @@ services:
       APP_DEBUG: 1
       APP_KEY: base64:RAnCeyD60dyiTxkziBsGZYBW2q6ldumJ7G+th2HNo88=
       DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
+      DB_HOST: db       # Ensure this is 'db' internally
+      DB_PORT: 3306     # MySQL inside Docker
       DB_DATABASE: customer-application
-      DB_USERNAME: root
+      DB_USERNAME: sample
       DB_PASSWORD: root
     container_name: customer-application-app
-      
 
   db:
     image: mysql:latest
@@ -39,26 +38,19 @@ services:
       MYSQL_DATABASE: customer-application
       MYSQL_USER: sample
       MYSQL_PASSWORD: root
-    networks:
-      - laravel_network
 
-  vite:
-    build:
-      context: .
-    command: npm run dev
+  nginx:
+    image: nginx:latest
+    container_name: customer-application-nginx
+    ports:
+      - "8080:80"
     volumes:
       - .:/var/www/html
-    ports:
-      - "5173:5173"
-    networks:
-      - laravel_network
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
-    container_name: customer-application-vite
-
-networks:
-  laravel_network:
-    driver: bridge
+    env_file:
+      - .env
 
 volumes:
   db_data:
