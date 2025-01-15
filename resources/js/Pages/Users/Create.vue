@@ -23,22 +23,22 @@ const submit = () => {
     form.post(route('users.store'), {
         preserveScroll: true,
         onSuccess: () => {
-            toast.success('User added successfully!', { duration: 3000, type: 'success', position: 'top-right' });
+            toast.success('Customer added successfully!', { duration: 3000, type: 'success', position: 'top-right' });
         },
         onError: () => {
-            toast.error('Failed to add user!', { duration: 3000, type: 'error', position: 'top-right' });
+            toast.error('Failed to add customer!', { duration: 3000, type: 'error', position: 'top-right' });
         }
     });
 };
 </script>
 
 <template>
-    <Head title="Create User" />
+    <Head title="Create Customer" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Create User
+                Create Customer
             </h2>
         </template>
         <div class="py-12">
@@ -122,7 +122,7 @@ const submit = () => {
                         <!-- Submit Button -->
                         <div class="mt-4">
                             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                Create User
+                                Create Customer
                             </PrimaryButton>
                         </div>
                     </form>

@@ -31,17 +31,17 @@ const submit = () => {
     form.put(route('users.update', user.id), {
         preserveScroll: true,
         onSuccess: () => {
-            toast.success('User updated successfully!', { duration: 3000, type: 'success', position: 'top-right' });
+            toast.success('Customer updated successfully!', { duration: 3000, type: 'success', position: 'top-right' });
         },
         onError: () => {
-            toast.error('Failed to update user!', { duration: 3000, type: 'error', position: 'top-right' });
+            toast.error('Failed to update customer!', { duration: 3000, type: 'error', position: 'top-right' });
         }
     });
 };
 </script>
 
 <template>
-    <Head title="Edit User" />
+    <Head title="Edit Customer" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -52,7 +52,7 @@ const submit = () => {
                     Back
                 </Link>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    Edit User
+                    Edit Customer
                 </h2>
             </div>
         </template>
@@ -110,7 +110,7 @@ const submit = () => {
                         <!-- Submit Button -->
                         <div class="mt-4">
                             <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                                Update User
+                                Update Customer
                             </PrimaryButton>
                         </div>
                     </form>

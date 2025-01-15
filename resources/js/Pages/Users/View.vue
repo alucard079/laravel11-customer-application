@@ -23,7 +23,7 @@ const form = useForm({
 </script>
 
 <template>
-    <Head title="View User" />
+    <Head title="View Customer" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -34,7 +34,7 @@ const form = useForm({
                     Back
                 </Link>
                 <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                    View User
+                    View Customer
                 </h2>
             </div>
         </template>

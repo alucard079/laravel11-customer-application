@@ -17,10 +17,10 @@ const handleDelete = (user_id) => {
     router.delete(route('users.destroy', user_id), {
         preserveScroll: true,
         onSuccess: () => {
-            toast.success('User deleted successfully!', { duration: 3000, type: 'success', position: 'top-right' });
+            toast.success('Customer deleted successfully!', { duration: 3000, type: 'success', position: 'top-right' });
         },
         onError: () => {
-            toast.error('Failed to delete user!', { duration: 3000, type: 'error', position: 'top-right' });
+            toast.error('Failed to delete customer!', { duration: 3000, type: 'error', position: 'top-right' });
         }
     });
 };
@@ -28,7 +28,7 @@ const handleDelete = (user_id) => {
 </script>
 
 <template>
-    <Head title="Users" />
+    <Head title="Customers" />
 
     <AuthenticatedLayout>
         <template #header>
@@ -36,12 +36,12 @@ const handleDelete = (user_id) => {
                 <h2
                     class="text-xl font-semibold leading-tight text-gray-800"
                 >
-                    Users
+                    Customers
                 </h2>
                 <Link
                     href="users.create"
                 >
-                    CREATE USER
+                    CREATE CUSTOMER
                 </Link>
             </div>
         </template>
