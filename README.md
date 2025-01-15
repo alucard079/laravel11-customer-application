@@ -54,6 +54,10 @@ Ensure you have the following installed:
 ```bash
   composer run dev
 ```
+8. Open the App
+```bash
+  [http:](http://127.0.0.1:8080/)
+```
     
 ## Tech Stack
 
