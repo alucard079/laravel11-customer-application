@@ -18,8 +18,8 @@ services:
       APP_DEBUG: 1
       APP_KEY: base64:RAnCeyD60dyiTxkziBsGZYBW2q6ldumJ7G+th2HNo88=
       DB_CONNECTION: mysql
-      DB_HOST: db       # Ensure this is 'db' internally
-      DB_PORT: 3306     # MySQL inside Docker
+      DB_HOST: db       
+      DB_PORT: 3306     
       DB_DATABASE: customer-application
       DB_USERNAME: sample
       DB_PASSWORD: root
