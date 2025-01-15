@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Services\UserService;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::all();
+        $users = $this->userService->getAllUsers();
         
         return Inertia::render('Users/Index', [
             'users' => $users,
@@ -32,27 +42,11 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        $validated = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|string|min:8|confirmed',
-            'contact_number' => [
-                'required',
-                'string',
-                'regex:/^(\+?[0-9]{1,4})?([0-9]{10})$/',
-            ],
-        ]);
+        $validated = $request->validated();
 
-        $user = User::create([
-            'firstname' => $validated['firstname'],
-            'lastname'  => $validated['lastname'],
-            'email'     => $validated['email'],
-            'password'  => bcrypt($validated['password']),
-            'contact_number' => $validated['contact_number'],
-        ]);
+        $this->userService->createUser($validated);
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully!');
@@ -81,25 +75,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(UpdateRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'firstname' => 'required|string|max:255',
-            'lastname'  => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email,' . $user->id,
-            'contact_number' => [
-                'required',
-                'string',
-                'regex:/^(\+?[0-9]{1,4})?([0-9]{10})$/',
-            ],
-        ]);
+        $validated = $request->validated();
 
-        $user->update([
-            'firstname' => $validated['firstname'],
-            'lastname'  => $validated['lastname'],
-            'email'     => $validated['email'],
-            'contact_number' => $validated['contact_number'],
-        ]);
+        $this->userService->updateUser($user, $validated);
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully!');
@@ -110,7 +90,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        $this->userService->deleteUser($user);
 
         return redirect()->back()
             ->with('success', 'User deleted successfully!');
